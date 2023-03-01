@@ -1,0 +1,32 @@
+version: '3.6'
+
+services:
+  web:
+    container_name: ff_test
+    build: ./app
+    restart: always
+    command: bash start.sh
+    volumes:
+      - ./app:/usr/src/app/
+    ports:
+      - "443:443"
+    env_file:
+      - ./.dev.env
+    networks:
+      - ff_bridge
+
+  db:
+    container_name: ff_db
+    image: postgres:14.0-alpine
+    restart: always
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    env_file:
+      - ./.dev.env
+    networks:
+      - ff_bridge
+
+
+networks:
+  ff_bridge:
+    driver: bridge
